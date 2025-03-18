@@ -22,7 +22,8 @@ def get_users():
     conn.close()
     return users
 
-# Add a user
+
+#Add a user
 def add_user(name, age):
     conn = sqlite3.connect("db.sqlite3")
     cursor = conn.cursor()
