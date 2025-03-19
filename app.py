@@ -83,6 +83,21 @@ def delete(id):
     delete_user(id)
     return redirect(url_for('index'))
 
+# Add User Form
+@app.route('/add-form', methods=['GET'])
+def add_form():
+    return render_template('add.html')
+
+# Edit User Form
+@app.route('/edit-form/<int:id>', methods=['GET'])
+def edit_form(id):
+    conn = sqlite3.connect("db.sqlite3")
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE id = ?", (id,))
+    user = cursor.fetchone()
+    conn.close()
+    return render_template('edit.html', user=user)
+
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
