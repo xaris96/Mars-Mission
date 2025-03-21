@@ -1,5 +1,5 @@
 import pytest
-from app import app
+from app import app, init_db
 import sqlite3
 
 @pytest.fixture
@@ -9,6 +9,7 @@ def client():
 
 @pytest.fixture
 def setup_database():
+    init_db()
     conn = sqlite3.connect("db.sqlite3")
     cursor = conn.cursor()
 

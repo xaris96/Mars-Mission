@@ -19,7 +19,6 @@ def init_db():
     """)
     conn.commit()
     conn.close()
-
 #Get all users
 def get_users():
     conn = sqlite3.connect("db.sqlite3")
