@@ -9,7 +9,14 @@ DB_path = "db.sqlite3"
 def init_db():
     conn = sqlite3.connect("db.sqlite3")
     cursor = conn.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            age INTEGER,
+            test_data BOOLEAN DEFAULT 0
+        )
+    """)
     conn.commit()
     conn.close()
 
@@ -24,10 +31,10 @@ def get_users():
 
 
 #Add a user
-def add_user(name, age):
+def add_user(name, age, test_data=False):
     conn = sqlite3.connect("db.sqlite3")
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO users (name, age) VALUES (?, ?)", (name, age))
+    cursor.execute("INSERT INTO users (name, age, test_data) VALUES (?, ?, ?)", (name, age, test_data))
     conn.commit()
     conn.close()
 
@@ -53,21 +60,25 @@ def index():
     return render_template('index.html', users=get_users())
 
 #Add User
+
 @app.route('/add', methods=['POST'])
 def add():
     if request.is_json:
         data = request.get_json()
         name = data.get('name')
         age = data.get('age')
+        test_data = data.get('test_data', False)  # Προεπιλογή False αν δεν παρέχεται
     else:
         name = request.form['name']
         age = request.form['age']
+        test_data = False  # Δεν υποστηρίζεται από φόρμες
 
     if not name or not age:
         return jsonify({'error': 'Invalid data'}), 400
 
-    add_user(name, age)
-    return jsonify({'message': 'User added successfully'}), 200
+    add_user(name, age, test_data)
+    return redirect(url_for('index'))
+
 #Edit User
 @app.route('/edit', methods=['POST'])
 def edit():
@@ -85,7 +96,7 @@ def edit():
         return jsonify({'error': 'Invalid data'}), 400
 
     update_user(id, name, age)
-    return jsonify({'message': 'User updated successfully'}), 200
+    return redirect(url_for('index'))
 
 #Delete User
 @app.route('/delete', methods=['POST'])
@@ -94,13 +105,13 @@ def delete():
         data = request.get_json()
         id = data.get('id')
     else:
-        id = request.form['id']
+        id = request.form.get('id')
 
     if not id:
         return jsonify({'error': 'Invalid data'}), 400
 
     delete_user(id)
-    return jsonify({'message': 'User deleted successfully'}), 200
+    return redirect(url_for('index'))
 
 # Add User Form
 @app.route('/add-form', methods=['GET'])

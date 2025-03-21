@@ -13,7 +13,10 @@
         <li>
             {{ user[1] }} (Age: {{ user[2] }})
             <a href="/edit-form/{{ user[0] }}">Edit</a>
-            <a href="/delete/{{ user[0] }}">Delete</a>
+            <form action="/delete" method="POST" style="display:inline;">
+                <input type="hidden" name="id" value="{{ user[0] }}">
+                <button type="submit">Delete</button>
+            </form>
         </li>
         {% endfor %}
     </ul>
