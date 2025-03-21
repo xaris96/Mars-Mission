@@ -55,33 +55,52 @@ def index():
 #Add User
 @app.route('/add', methods=['POST'])
 def add():
-    name = request.form['name']
-    age = request.form['age']
-    add_user(name, age)
-    return redirect(url_for('index'))
+    if request.is_json:
+        data = request.get_json()
+        name = data.get('name')
+        age = data.get('age')
+    else:
+        name = request.form['name']
+        age = request.form['age']
 
+    if not name or not age:
+        return jsonify({'error': 'Invalid data'}), 400
+
+    add_user(name, age)
+    return jsonify({'message': 'User added successfully'}), 200
 #Edit User
 @app.route('/edit', methods=['POST'])
 def edit():
-    if request.method == 'POST':
-        id = request.form['id']
-        name = request.form['name']
-        age = request.form['age']
-        update_user(id, name, age)
-        return redirect(url_for('index'))
-    #prefill the form with user data
-    conn = sqlite3.connect("db.sqlite3")
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE id = ?", (id,))
-    user = cursor.fetchone()
-    conn.close()
-    return render_template('edit.html', user=user)
+    if request.is_json:
+        data = request.get_json()
+        id = data.get('id')
+        name = data.get('name')
+        age = data.get('age')
+    else:
+        id = request.form.get('id')
+        name = request.form.get('name')
+        age = request.form.get('age')
+
+    if not id or not name or not age:
+        return jsonify({'error': 'Invalid data'}), 400
+
+    update_user(id, name, age)
+    return jsonify({'message': 'User updated successfully'}), 200
 
 #Delete User
-@app.route('/delete/<int:id>', methods=['GET'])
-def delete(id):
+@app.route('/delete', methods=['POST'])
+def delete():
+    if request.is_json:
+        data = request.get_json()
+        id = data.get('id')
+    else:
+        id = request.form['id']
+
+    if not id:
+        return jsonify({'error': 'Invalid data'}), 400
+
     delete_user(id)
-    return redirect(url_for('index'))
+    return jsonify({'message': 'User deleted successfully'}), 200
 
 # Add User Form
 @app.route('/add-form', methods=['GET'])
