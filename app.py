@@ -5,6 +5,7 @@ This application manages users for the Mars Mission project.
 
 import sqlite3  # Standard library imports
 from flask import Flask, request, jsonify, render_template, redirect, url_for  # Third-party imports
+import logging
 
 # Initialize Flask application
 app = Flask(__name__)
@@ -12,21 +13,28 @@ app = Flask(__name__)
 # Database file path
 DB_PATH = "db.sqlite3"
 
+logging.basicConfig(level=logging.DEBUG)
+
 # Database Setup
 def init_db():
     """Initialize the database and create the users table if it doesn't exist."""
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            age INTEGER,
-            test_data BOOLEAN DEFAULT 0
-        )
-    """)
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY,
+                name TEXT,
+                age INTEGER,
+                test_data BOOLEAN DEFAULT 0
+            )
+        """)
+        conn.commit()
+        conn.close()
+        logging.info("Database initialized successfully.")
+    except Exception as e:
+        logging.error(f"Error initializing database: {e}")
+        raise
 
 # Get all users
 def get_users():

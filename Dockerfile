@@ -1,20 +1,20 @@
-# Use an official Python runtime as a parent image
+# Use the official Python image
 FROM python:3.12-slim
 
 # Set the working directory
 WORKDIR /app
 
-# Install sqlite3
+# Install dependencies
 RUN apt update && apt install -y sqlite3 && rm -rf /var/lib/apt/lists/*
 
-# Copy the current directory contents into the container
+# Copy the application files
 COPY . /app
 
-# Install dependencies
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the port the app runs on
+# Expose the application port
 EXPOSE 5000
 
-# Default command for the container
+# Run the application
 CMD ["python", "app.py"]
