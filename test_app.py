@@ -7,7 +7,7 @@ import pytest
 from app import app, init_db
 
 @pytest.fixture
-def client():
+def flask_client():
     """Fixture for Flask test client."""
     with app.test_client() as client_instance:
         yield client_instance
@@ -30,9 +30,9 @@ def setup_database():
     conn.commit()
     conn.close()
 
-def test_add_user(client_instance, setup_db):  # noqa: W0613
+def test_add_user(flask_client, setup_database):  # pylint: disable=redefined-outer-name,unused-argument
     """Test adding a user."""
-    response = client_instance.post(
+    response = flask_client.post(
         '/add',
         json={'name': 'Test User', 'age': 30, 'test_data': True},
         follow_redirects=True
@@ -40,13 +40,13 @@ def test_add_user(client_instance, setup_db):  # noqa: W0613
     assert response.status_code == 200
     assert b'Test User' in response.data
 
-def test_edit_user(client_instance, setup_db):  # noqa: W0613
+def test_edit_user(flask_client, setup_database):  # pylint: disable=redefined-outer-name,unused-argument
     """Test editing a user."""
-    client_instance.post(
+    flask_client.post(
         '/add',
         json={'name': 'Jane Doe', 'age': 25, 'test_data': True}
     )
-    response = client_instance.post(
+    response = flask_client.post(
         '/edit',
         json={'id': 1, 'name': 'Jane Smith', 'age': 26},
         follow_redirects=True
@@ -54,13 +54,13 @@ def test_edit_user(client_instance, setup_db):  # noqa: W0613
     assert response.status_code == 200
     assert b'Jane Smith' in response.data
 
-def test_delete_user(client_instance, setup_db):  # noqa: W0613
+def test_delete_user(flask_client, setup_database):  # pylint: disable=redefined-outer-name,unused-argument
     """Test deleting a user."""
-    client_instance.post(
+    flask_client.post(
         '/add',
         json={'name': 'John Doe', 'age': 30, 'test_data': True}
     )
-    response = client_instance.post(
+    response = flask_client.post(
         '/delete',
         json={'id': 1},
         follow_redirects=True
