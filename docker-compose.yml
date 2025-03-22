@@ -8,5 +8,5 @@ services:
     volumes:
       - ./db.sqlite3:/app/db.sqlite3
     environment:
-      - FLASK_ENV=development
+      - FLASK_DEBUG=1  # Ενεργοποιεί το debug mode
     command: python app.py
