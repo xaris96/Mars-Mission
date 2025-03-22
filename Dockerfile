@@ -1,20 +1,21 @@
-# Use the official Python image
+# Χρησιμοποιήστε Python 3.12-slim
 FROM python:3.12-slim
 
-# Set the working directory
+# Ορισμός working directory
 WORKDIR /app
 
-# Install dependencies
-RUN apt update && apt install -y sqlite3 && rm -rf /var/lib/apt/lists/*
+# Εγκατάσταση απαραίτητων πακέτων για SQLite
+RUN apt-get update && apt-get install -y sqlite3 && rm -rf /var/lib/apt/lists/*
 
-# Copy the application files
-COPY . /app
+# Αντιγραφή όλων των αρχείων
+COPY . .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Εγκατάσταση Python dependencies (με virtual environment)
+RUN python -m venv /venv && \
+    /venv/bin/pip install --no-cache-dir -r requirements.txt
 
-# Expose the application port
+# Εξαγωγή της θύρας
 EXPOSE 5000
 
-# Run the application
-CMD ["python", "app.py"]
+# Εκτέλεση της εφαρμογής με virtual environment
+CMD ["/venv/bin/python", "app.py"]
