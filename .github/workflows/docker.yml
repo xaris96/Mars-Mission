@@ -42,9 +42,13 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y docker-compose
 
+    - name: Debug Logs
+      run: |
+        docker-compose logs app
+
     - name: Set up Docker
       run: |
         docker-compose up -d
-        docker-compose exec app pytest
         docker-compose ps
+        docker-compose exec app pytest
         docker-compose down
