@@ -4,8 +4,9 @@ This application manages users for the Mars Mission project.
 """
 
 import sqlite3  # Standard library imports
+import logging  # Standard library imports
 from flask import Flask, request, jsonify, render_template, redirect, url_for  # Third-party imports
-import logging
+
 
 # Initialize Flask application
 app = Flask(__name__)
@@ -33,7 +34,7 @@ def init_db():
         conn.close()
         logging.info("Database initialized successfully.")
     except Exception as e:
-        logging.error(f"Error initializing database: {e}")
+        logging.error("Error initializing database: %s", e)
         raise
 
 # Get all users
