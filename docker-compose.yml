@@ -1,18 +1,22 @@
-version: '3.8'
-
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     ports:
       - "5000:5000"
     volumes:
-      - db_data:/app/db.sqlite3
+      - db_data:/app/data  # Σύνδεση του volume με τον φάκελο /app/data
     env_file:
-      - .env
-    command: python app.py
+      - .env.production
     restart: always
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
 
 volumes:
   db_data:
