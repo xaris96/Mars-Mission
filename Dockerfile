@@ -12,7 +12,8 @@ COPY . .
 
 # Εγκατάσταση Python dependencies (με virtual environment)
 RUN python -m venv /venv && \
-    /venv/bin/pip install --no-cache-dir -r requirements.txt
+    /venv/bin/pip install --no-cache-dir -r requirements.txt && \
+    /venv/bin/pip install --no-cache-dir pytest
 
 # Εξαγωγή της θύρας
 EXPOSE 5000
