@@ -18,7 +18,7 @@ def test_client():
 
     init_db(testing=True)
 
-    # Καθαρισμός test δεδομένων πριν από κάθε test
+    # clear previous test data
     clear_test_data()
 
     with app.test_client() as client:
@@ -54,7 +54,7 @@ def test_api_users(test_client): # pylint: disable=redefined-outer-name
     response = test_client.get('/apitest/users')
     users = response.json
     assert response.status_code == 200
-    assert len(users) == 1  # Πρέπει να υπάρχει μόνο ένας χρήστης
+    assert len(users) == 1  # Only one user should be present
     assert users[0]['name'] == 'Test User'
 
 def test_add_user_invalid_data(test_client): # pylint: disable=redefined-outer-name

@@ -37,7 +37,7 @@ def init_db(testing=False):
             )
         """)
 
-        # Προσθήκη χρήστη μόνο αν είναι για δοκιμές
+        # Insert test data if testing
         if testing:
             cursor.execute("INSERT INTO users (name, age, test_data) VALUES (?, ?, ?)",
                             ("John Doe", 30, True))

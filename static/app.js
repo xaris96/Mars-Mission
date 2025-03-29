@@ -1,4 +1,4 @@
-// Προσθήκη νέου χρήστη
+// add new user
 document.getElementById('addForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('name').value;
@@ -7,11 +7,11 @@ document.getElementById('addForm').addEventListener('submit', async (e) => {
     try {
         const response = await fetch('/add', {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ 
-                name: name, 
+            body: JSON.stringify({
+                name: name,
                 age: age,
                 test_data: false
             })
@@ -22,8 +22,8 @@ document.getElementById('addForm').addEventListener('submit', async (e) => {
             throw new Error(errorData.error || 'Failed to add user');
         }
         
-        await fetchResources();  // Επαναφόρτωση δεδομένων
-        document.getElementById('name').value = '';  // Καθαρισμός φόρμας
+        await fetchResources();  // reload data
+        document.getElementById('name').value = '';  // clear input
         document.getElementById('age').value = '';
         alert("User added successfully!");
     } catch (error) {
@@ -31,7 +31,7 @@ document.getElementById('addForm').addEventListener('submit', async (e) => {
     }
 });
 
-// Φόρτωση χρηστών από το API
+// load users from api
 async function fetchResources() {
     try {
         const response = await fetch('/api/users');
@@ -53,7 +53,7 @@ async function fetchResources() {
     }
 }
 
-// Επεξεργασία χρήστη
+// edit user
 async function editResource(id) {
     const newName = prompt("Enter new name:");
     const newAge = prompt("Enter new age:");
@@ -66,7 +66,7 @@ async function editResource(id) {
     try {
         const response = await fetch(`/edit`, {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ id: id, name: newName, age: newAge })
@@ -77,14 +77,14 @@ async function editResource(id) {
             throw new Error(errorData.error || 'Failed to edit user');
         }
 
-        await fetchResources();  // Επαναφόρτωση δεδομένων
+        await fetchResources();  // reload data
         alert("User updated successfully!");
     } catch (error) {
         alert(error.message);
     }
 }
 
-// Διαγραφή χρήστη
+// delete user
 async function deleteResource(id) {
     if (!confirm("Are you sure you want to delete this user?")) {
         return;
@@ -93,7 +93,7 @@ async function deleteResource(id) {
     try {
         const response = await fetch(`/delete`, {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ id: id })
@@ -104,12 +104,12 @@ async function deleteResource(id) {
             throw new Error(errorData.error || 'Failed to delete user');
         }
 
-        await fetchResources();  // Επαναφόρτωση δεδομένων
+        await fetchResources();  // reload data
         alert("User deleted successfully!");
     } catch (error) {
         alert(error.message);
     }
 }
 
-// Φόρτωση χρηστών κατά την εκκίνηση
+// load initial data
 fetchResources();

@@ -4,7 +4,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - db_data:/app/data  # Σύνδεση του volume με τον φάκελο /app/data
+      - db_data:/app/data
     env_file:
       - .env.production
     restart: always
