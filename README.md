@@ -1,94 +1,125 @@
 # 🚀 Mars Mission CRUD App
 
-## **Description**  
-The **Mars Mission CRUD App** is a mission-critical system for managing resources (crew members, equipment, supplies) at the first Martian colony. Built with **Flask**, **SQLite**, and **Docker**, it provides a RESTful API and a simple UI for CRUD operations. The project includes a **CI/CD pipeline** (GitHub Actions) for automated testing, Docker image builds, and secure deployment.
+## **Description**
+The **Mars Mission CRUD App** is a student project. Built with **Flask**, **SQLite**, and **Docker**, it provides a RESTful API and a simple UI for CRUD operations. The project includes a **CI/CD pipeline** (GitHub Actions) for automated testing, Docker image builds, and secure deployment.
 
 ---
 
-## **Key Features**  
-- **CRUD Operations**: Manage resources via API or web UI.
-- **Automated Testing**: Unit tests with `pytest` (86% coverage) and code quality checks with `pylint`.
-- **CI/CD Pipeline**:  
-  - Linting, testing, and Docker image builds on every commit.
-  - Automatic push to Docker Hub on `main` branch updates.
-- **Infrastructure as Code**:  
-  - Docker Compose setup for local development (Flask + Nginx).
-  - Persistent SQLite database with volume mounting.
-- **Simple UI**: Vanilla JavaScript frontend for intuitive resource management.
+## **Key Features**
+- **📦 CRUD Operations**: Manage resources via API or web UI
+- **🧪 Automated Testing**: Unit tests with `pytest` (86% coverage) + code quality checks with `pylint`
+- **⚙️ CI/CD Pipeline**:
+  - Linting, testing, and Docker image builds on every commit
+  - Automatic push to Docker Hub on `main` branch updates
+- **🐳 Infrastructure as Code**:
+  - Docker Compose setup (Flask + Nginx)
+  - Persistent SQLite database with volume mounting
+- **🖥️ Simple UI**: Vanilla JavaScript frontend
 
 ---
 
-## **🚀 Quick Start with Docker Compose**  
-**Prerequisites**: Docker and Docker Compose installed.  
+## **🚀 Quick Start with Docker Compose**
+**Prerequisites**:
+- Docker and Docker Compose installed
+  - On **Windows/macOS**: Install [Docker Desktop](https://www.docker.com/products/docker-desktop).
+  - On **Linux**: Install [Docker Engine](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
 
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/xaris96/Mars-Mission.git
+   cd Mars-Mission
+   ```
+
+2. **Start the stack**:
+   ```bash
+   docker-compose up --build
+   ```
+   > **Note**: This command rebuilds the Docker image every time to ensure the latest changes are included.
+
+   To stop the stack, use:
+   ```bash
+   docker-compose down
+   ```
+   > **Note**: This command rebuilds the Docker image every time to ensure the latest changes are included.
+
+3. **Access the application**:
+   - Web UI: `http://localhost` (or `http://127.0.0.1:5000` if running Flask directly)
+   - API Endpoints:
+     - Get all users: `GET /api/users`
+     - Add a user: `POST /add`
+     - Edit a user: `POST /edit`
+     - Delete a user: `POST /delete`
+
+---
+
+## **🛠️ Development Setup**
+### **Run Locally (Without Docker)**
 1. Clone the repository:
    ```bash
    git clone https://github.com/xaris96/Mars-Mission.git
    cd Mars-Mission
-Start the stack:
+   ```
 
-bash
-Copy
-docker-compose up --build
-Access the application:
+2. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-Web UI: http://localhost
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-API Docs: http://localhost/api
+4. Initialize the database:
+   ```bash
+   python -c "from app import init_db; init_db()"
+   ```
 
-🛠️ Development Setup
-Run Locally (Without Docker)
-Install Python 3.12+ and dependencies:
+5. Start the server:
+   ```bash
+   python app.py
+   ```
 
-bash
-Copy
-pip install -r requirements.txt
-Initialize the database:
+6. Access the application at: `http://localhost:5000`
 
-bash
-Copy
-python -c "from app import init_db; init_db()"
-Start the Flask server:
+---
 
-bash
-Copy
-python app.py
-Access the UI at http://localhost:5000.
+### **Run Tests**
+To run the unit tests inside the Docker container:
+```bash
+docker-compose run app /venv/bin/pytest --cov=app
+```
 
-📂 Project Structure
-Copy
-Mars-Mission/
+---
+
+## **📂 Project Structure**
+```
+mars-mission/
 ├── app.py               # Flask backend
-├── static/              # Frontend assets (JS/CSS)
-│   └── app.js
+├── static/              # Frontend assets
+│   └── app.js           # JavaScript logic
 ├── templates/           # HTML templates
-│   └── index.html
+│   └── index.html       # Main UI
 ├── data/                # Database storage
-├── Dockerfile           # Flask container setup
-├── docker-compose.yml   # Full-stack deployment
-├── .github/workflows/   # CI/CD pipelines
-│   └── main.yml
-└── requirements.txt     # Python dependencies
-🔧 CI/CD Pipeline
-The GitHub Actions workflow (.github/workflows/main.yml) includes:
+│   └── db.sqlite3       # Main database file
+│   └── db.sqlite3       # Database for testings
+├── test_app.py          # Tests for the Flask app
+├── nginx.conf           # Nginx configuration file
+├── Dockerfile           # Container setup
+├── docker-compose.yml   # Full-stack config
+├── .env                 # Environment variables (not included in version control)
+├── .env.production      # Environment variables for production
+├── pytest.ini           # Pytest configuration file
+├── requirements.txt     # Python dependencies
+├── .gitignore           # Files and folders to ignore in Git version control
+├── README.MD            # Project documentation (description, setup instructions)
+├── setup.py             # Configuration for packaging the project as a Python package
+└── .github/workflows/   # CI/CD pipelines
+    └── main.yml         # GitHub Actions workflow
+```
 
-Linting: Code quality checks with pylint.
+---
 
-Testing: Unit tests with pytest.
-
-Docker Build:
-
-Builds and pushes the Docker image to Docker Hub.
-
-Tags: xaris96/mars-mission-app:latest.
-
-Branch Protection: Merges to main require passing checks.
-
-API Endpoints
-Endpoint	Method	Description	Example Request Body
-/api/users	GET	List all resources	-
-/add	POST	Add a new resource	{"name": "Rover", "age": 5}
-/edit	POST	Update a resource	{"id": 1, "name": "Updated"}
-/delete	POST	Delete a resource	{"id": 1}
-📜 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+## **📜 License**
+This code is provided for educational purposes only.
